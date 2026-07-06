@@ -50,11 +50,6 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
-      JWT_EXPIRATION: 7d
-      OTP_EXPIRY_MINUTES: 5
-      OTP_MAX_ATTEMPTS: 5
-      OTP_RESEND_COOLDOWN: 90
-      KAVENEGAR_API_KEY: ${KAVENEGAR_API_KEY:-}
       VIP_SKU: hamahang_vip_monthly
       FRONTEND_URL: https://dating.medalino.ir
     depends_on:
@@ -64,13 +59,6 @@ services:
         condition: service_healthy
     networks:
       - hamahang-network
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.hamahang-api.rule=Host(`dating.medalino.ir`) && PathPrefix(`/api`)
-      - traefik.http.routers.hamahang-api.entrypoints=websecure
-      - traefik.http.routers.hamahang-api.tls=true
-      - traefik.http.routers.hamahang-api.tls.certresolver=letsencrypt
-      - traefik.http.services.hamahang-api.loadbalancer.server.port=3000
 
   admin:
     build:
@@ -86,13 +74,6 @@ services:
       - backend
     networks:
       - hamahang-network
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.hamahang-admin.rule=Host(`dating.medalino.ir`)
-      - traefik.http.routers.hamahang-admin.entrypoints=websecure
-      - traefik.http.routers.hamahang-admin.tls=true
-      - traefik.http.routers.hamahang-admin.tls.certresolver=letsencrypt
-      - traefik.http.services.hamahang-admin.loadbalancer.server.port=3001
 
 volumes:
   pgdata:
