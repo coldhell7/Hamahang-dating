@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: hamahang
       POSTGRES_USER: hamahang
-      POSTGRES_PASSWORD: hamahang_secret_1403
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hamahang_secret_1403}
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -44,13 +44,22 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: hamahang
-      DB_PASSWORD: hamahang_secret_1403
+      DB_PASSWORD: ${DB_PASSWORD:-hamahang_secret_1403}
       DB_DATABASE: hamahang
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: ${JWT_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRATION: 7d
+      OTP_EXPIRY_MINUTES: 5
+      OTP_MAX_ATTEMPTS: 5
+      OTP_RESEND_COOLDOWN: 90
+      KAVENEGAR_API_KEY: ${KAVENEGAR_API_KEY:-}
+      BAZAAR_VERIFY_URL: https://pardakht.cafebazaar.ir/devapi/v2/api/validate
       VIP_SKU: hamahang_vip_monthly
+      PRESET_MESSAGE_MAX_COUNT: 5
+      STARTER_STICKER_COUNT: 20
+      VIP_MONTHLY_STICKER_COUNT: 50
       FRONTEND_URL: https://dating.medalino.ir
     depends_on:
       postgres:
@@ -59,6 +68,13 @@ services:
         condition: service_healthy
     networks:
       - hamahang-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hamahang-api.rule=Host(`dating.medalino.ir`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.hamahang-api.entrypoints=websecure"
+      - "traefik.http.routers.hamahang-api.tls=true"
+      - "traefik.http.routers.hamahang-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hamahang-api.loadbalancer.server.port=3000"
 
   admin:
     build:
@@ -69,11 +85,19 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
+      HOSTNAME: 0.0.0.0
       NEXT_PUBLIC_API_URL: https://dating.medalino.ir/api
     depends_on:
       - backend
     networks:
       - hamahang-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hamahang-admin.rule=Host(`dating.medalino.ir`)"
+      - "traefik.http.routers.hamahang-admin.entrypoints=websecure"
+      - "traefik.http.routers.hamahang-admin.tls=true"
+      - "traefik.http.routers.hamahang-admin.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hamahang-admin.loadbalancer.server.port=3001"
 
 volumes:
   pgdata:
