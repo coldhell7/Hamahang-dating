@@ -21,6 +21,7 @@ RUN apk add --no-cache tzdata curl
 
 COPY package*.json ./
 RUN npm ci --production --ignore-scripts
+RUN npm rebuild bcrypt
 
 COPY --from=builder /app/dist ./dist
 
