@@ -1,0 +1,111 @@
+services:
+  # ============ Database ============
+  postgres:
+    image: postgres:16-alpine
+    container_name: hamahang-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hamahang
+      POSTGRES_USER: hamahang
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hamahang_secret_1403}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - hamahang-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hamahang"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============ Cache ============
+  redis:
+    image: redis:7-alpine
+    container_name: hamahang-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redisdata:/data
+    networks:
+      - hamahang-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ============ Backend API ============
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: hamahang-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: hamahang
+      DB_PASSWORD: ${DB_PASSWORD:-hamahang_secret_1403}
+      DB_DATABASE: hamahang
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_EXPIRATION: 7d
+      OTP_EXPIRY_MINUTES: 5
+      OTP_MAX_ATTEMPTS: 5
+      OTP_RESEND_COOLDOWN: 90
+      KAVENEGAR_API_KEY: ${KAVENEGAR_API_KEY:-}
+      BAZAAR_VERIFY_URL: https://pardakht.cafebazaar.ir/devapi/v2/api/validate
+      VIP_SKU: hamahang_vip_monthly
+      PRESET_MESSAGE_MAX_COUNT: 5
+      STARTER_STICKER_COUNT: 20
+      VIP_MONTHLY_STICKER_COUNT: 50
+      FRONTEND_URL: https://dating.medalino.ir
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - hamahang-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hamahang-api.rule=Host(`dating.medalino.ir`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.hamahang-api.entrypoints=websecure"
+      - "traefik.http.routers.hamahang-api.tls=true"
+      - "traefik.http.routers.hamahang-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hamahang-api.loadbalancer.server.port=3000"
+
+  # ============ Admin Panel ============
+  admin:
+    build:
+      context: ../admin
+      dockerfile: Dockerfile
+    container_name: hamahang-admin
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: https://dating.medalino.ir/api
+    depends_on:
+      - backend
+    networks:
+      - hamahang-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hamahang-admin.rule=Host(`dating.medalino.ir`)"
+      - "traefik.http.routers.hamahang-admin.entrypoints=websecure"
+      - "traefik.http.routers.hamahang-admin.tls=true"
+      - "traefik.http.routers.hamahang-admin.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hamahang-admin.loadbalancer.server.port=3001"
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  hamahang-network:
+    driver: bridge
