@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هم‌آهنگ | مدل کامل کسب‌وکار و تجربه‌ی کاربری — نسخه‌ی سوم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#100E1C; --bg-soft:#17142A; --panel:#1D1933; --line:#322C52;
+    --cream:#F1ECDF; --dim:#9C93C2; --gold:#E7A93F; --coral:#E8637A; --teal:#4FC2B4; --violet:#8B7CF0;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Vazirmatn',sans-serif;line-height:1.85;}
+  .mono{font-family:'Space Mono',monospace;direction:ltr;unicode-bidi:isolate;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px;}
+  .section-pad{padding:80px 0;}
+  @media(max-width:700px){.section-pad{padding:52px 0;}}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);}
+  h2.section-title{font-size:clamp(24px,3.6vw,40px);font-weight:800;margin:0 0 14px;color:var(--cream);}
+  h3.sub-title{font-size:20px;font-weight:700;margin:0 0 10px;color:var(--cream);}
+  .lede{color:var(--dim);font-size:16px;max-width:760px;margin:0 0 36px;}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);}
+  a{color:var(--gold);}
+
+  /* nav pills at top */
+  .toc{position:sticky; top:0; z-index:20; background:rgba(16,14,28,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .toc-row{display:flex; gap:6px; overflow-x:auto; padding:14px 28px; max-width:1160px; margin:0 auto;}
+  .toc-row a{white-space:nowrap; font-size:12.5px; color:var(--dim); text-decoration:none; border:1px solid var(--line); border-radius:100px; padding:7px 14px; font-family:'Space Mono',monospace;}
+  .toc-row a:hover{color:var(--gold); border-color:var(--gold);}
+
+  /* hero */
+  .hero{padding:70px 0 50px; border-bottom:1px solid var(--line);
+    background:radial-gradient(ellipse 900px 460px at 85% -20%, rgba(139,124,240,.22), transparent 60%), var(--bg);}
+  .hero h1{font-size:clamp(30px,5vw,52px); font-weight:900; margin:0 0 16px; line-height:1.2;}
+  .hero h1 em{font-style:normal; color:var(--gold);}
+  .hero p{color:var(--dim); font-size:16.5px; max-width:720px;}
+  .part-badge{display:inline-flex; gap:8px; font-family:'Space Mono',monospace; font-size:11px; color:var(--teal); border:1px solid var(--teal); border-radius:100px; padding:5px 12px; margin-inline-end:8px; margin-bottom:6px;}
+
+  /* recap cards (parts 1 & 2) */
+  .recap-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:900px){.recap-grid{grid-template-columns:1fr;}}
+  .recap-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px;}
+  .recap-card .k{font-family:'Space Mono',monospace; font-size:22px; color:var(--gold); font-weight:700;}
+  .recap-card .t{font-size:13px; color:var(--dim); margin-top:6px;}
+  .recap-list{display:flex; flex-direction:column; gap:2px; background:var(--line); border-radius:16px; overflow:hidden; border:1px solid var(--line); margin-top:18px;}
+  .recap-row{background:var(--panel); padding:16px 20px; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; font-size:14px;}
+  .recap-row .name{font-weight:700; min-width:140px;}
+  .recap-row .note{color:var(--dim);}
+
+  /* generic feature cards */
+  .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.feat-grid{grid-template-columns:1fr;}}
+  .feat-card{background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px;}
+  .feat-card .num{font-family:'Space Mono',monospace; color:var(--gold); font-size:12.5px;}
+  .feat-card h4{margin:9px 0 8px; font-size:16px;}
+  .feat-card p{margin:0; font-size:13.6px; color:var(--dim);}
+
+  /* funnel / flow diagram */
+  .flow-row{display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; justify-content:center;}
+  .flow-step{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px; font-size:13.5px; text-align:center; min-width:140px; max-width:170px;}
+  .flow-step .tag{display:block; font-family:'Space Mono',monospace; font-size:10.5px; color:var(--teal); margin-bottom:6px;}
+  .flow-arrow{align-self:center; color:var(--gold); font-size:18px;}
+
+  /* two col */
+  .two-col{display:grid; grid-template-columns:1.1fr .9fr; gap:24px;}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+  .two-col-even{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media(max-width:900px){.two-col-even{grid-template-columns:1fr;}}
+
+  .chart-card{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:26px;}
+  .chart-title{font-size:13.5px; color:var(--dim); font-family:'Space Mono',monospace; margin-bottom:16px;}
+
+  /* room mockups reused */
+  .mock{background:radial-gradient(ellipse at top, #241f42, #14111f 70%); border:1px solid var(--line); border-radius:22px; padding:24px;}
+  .mock .mtop{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-size:14px; font-weight:700;}
+  .mock .live{font-size:11px; font-family:'Space Mono',monospace; color:var(--coral); display:flex; align-items:center; gap:6px;}
+  .mock .live::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--coral);}
+  .sticker-row{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0;}
+  .sticker{width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; background:rgba(241,236,223,.06); border:1px solid var(--line);}
+  .gift-bubble{background:linear-gradient(135deg, rgba(231,169,63,.18), rgba(232,99,122,.16)); border:1px solid var(--gold); border-radius:14px; padding:12px 16px; font-size:13px; display:flex; align-items:center; gap:8px;}
+
+  /* affiliate dashboard mock */
+  .aff-table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  .aff-table th{font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--dim); text-align:right; padding:10px 12px; border-bottom:1px solid var(--line);}
+  .aff-table td{padding:12px; border-bottom:1px solid var(--line);}
+  .aff-table tr:last-child td{border-bottom:none;}
+  .badge{display:inline-block; font-family:'Space Mono',monospace; font-size:11px; padding:3px 9px; border-radius:100px; background:rgba(79,194,180,.15); color:var(--teal);}
+
+  /* messaging asymmetry cards */
+  .gender-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media(max-width:800px){.gender-grid{grid-template-columns:1fr;}}
+  .gender-card{border-radius:18px; padding:24px; border:1px solid var(--line);}
+  .gender-card.women{background:rgba(232,99,122,.07); border-color:rgba(232,99,122,.3);}
+  .gender-card.men{background:rgba(139,124,240,.07); border-color:rgba(139,124,240,.3);}
+  .gender-card h4{margin:0 0 10px; font-size:16px;}
+  .gender-card ul{margin:0; padding-inline-start:18px; font-size:14px; color:var(--dim);}
+  .gender-card li{margin-bottom:6px;}
+
+  /* AI companion cards */
+  .ai-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media(max-width:800px){.ai-grid{grid-template-columns:1fr;}}
+  .ai-card{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:26px;}
+  .ai-avatar{width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:14px;}
+  .note-box{background:rgba(231,169,63,.08); border:1px solid rgba(231,169,63,.3); border-radius:14px; padding:16px 20px; font-size:13.5px; color:var(--dim); margin-top:18px;}
+  .note-box b{color:var(--gold);}
+
+  /* games grid */
+  .game-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media(max-width:900px){.game-grid{grid-template-columns:repeat(2,1fr);}}
+  .game-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px; text-align:center;}
+  .game-card .ic{font-size:26px; margin-bottom:8px;}
+  .game-card .t{font-size:13.5px; font-weight:600;}
+  .game-card .d{font-size:12px; color:var(--dim); margin-top:4px;}
+
+  footer{padding:50px 0 70px; text-align:center; color:var(--dim); font-size:13px;}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-row">
+    <a href="#part1">۰۱ بازار جهانی</a>
+    <a href="#part2">۰۲ نسخه‌ی ایران</a>
+    <a href="#part3">۰۳ اتاق‌های پولی + دعوت</a>
+    <a href="#part4">۰۴ هدیه‌ی درون‌اتاقی</a>
+    <a href="#part5">۰۵ افیلیت مجاری تبلیغی</a>
+    <a href="#part6">۰۶ قیف ورود کاربر</a>
+    <a href="#part7">۰۷ مچینگ نامتقارن</a>
+    <a href="#part8">۰۸ بازی‌های سرگرمی</a>
+    <a href="#part9">۰۹ دستیار هوش مصنوعی</a>
+    <a href="#part10">۱۰ جمع‌بندی</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div><span class="part-badge">نسخه‌ی ۳ — مدل کامل</span></div>
+    <h1>هم‌آهنگ: از تحلیل بازار تا <em>یک اقتصاد کامل درون‌اپی</em></h1>
+    <p>این سند سه لایه دارد: خلاصه‌ی تحقیق بازار جهانی، خلاصه‌ی معماری «اتاق‌های پخش زنده» برای ایران، و در ادامه — بخش تازه — گسترش کامل مدل کاری و کاربری بر اساس اتاق‌های پولی با لینک دعوت اختصاصی، اقتصاد هدیه‌ی درون‌برنامه‌ای، برنامه‌ی افیلیت برای مجاری تبلیغی، قیف تدریجی تکمیل پروفایل، مچینگ نامتقارن جنسیتی، سرگرمی‌های ساده، و دستیار مکالمه‌ی هوش مصنوعی برای کاربران با ترس از شروع ارتباط.</p>
+  </div>
+</section>
+
+<!-- PART 1 RECAP -->
+<section class="section-pad" id="part1">
+  <div class="wrap">
+    <div class="eyebrow">۰۱ &nbsp;خلاصه‌ی گزارش اول — بازار جهانی</div>
+    <h2 class="section-title">چه چیزی از تحلیل رقبای جهانی یاد گرفتیم</h2>
+    <p class="lede">صنعت دیتینگ ۶ میلیارد دلاری‌ست، اما دیتینگ موزیک‌محور هرگز به یک دسته‌ی مستقل بزرگ تبدیل نشد. شش بازیگر بررسی شد؛ نتیجه یکسان بود: ایده خوب، اجرا ناقص.</p>
+    <div class="recap-grid">
+      <div class="recap-card"><div class="k">$6.07B</div><div class="t">درآمد کل صنعت دیتینگ در ۲۰۲۵ (Business of Apps)</div></div>
+      <div class="recap-card"><div class="k">1–2M</div><div class="t">سقف یوزر تجمعی اپ‌های موزیک‌محور مستقل (نه غول‌ها)</div></div>
+      <div class="recap-card"><div class="k">۴ علت مشترک شکست</div><div class="t">وابستگی به API، فیک‌اکانت، مچینگ خشک، تک‌مدل درآمدی</div></div>
+    </div>
+    <div class="recap-list">
+      <div class="recap-row"><span class="name">Tastebuds.fm</span><span class="note">۲۰۱۰، تعطیل‌شده در ۲۰۲۳، بازگشایی محدود — وابسته به API لست‌اف‌ام/اسپاتیفای</span></div>
+      <div class="recap-row"><span class="name">makromusic</span><span class="note">فعال‌ترین رقیب امروز — اما شکایت گسترده از فیک‌اکانت و مچینگ خشک (یک‌بار گوش‌دادن = مچ دائمی)</span></div>
+      <div class="recap-row"><span class="name">Boo</span><span class="note">موفق‌ترین بنچمارک نیچ‌دیتینگ (۱M+ عضو) — به‌خاطر لایه‌ی کامیونیتی، نه صرفاً مچ لحظه‌ای</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 2 RECAP -->
+<section class="section-pad" id="part2">
+  <div class="wrap">
+    <div class="eyebrow">۰۲ &nbsp;خلاصه‌ی گزارش دوم — نسخه‌ی ایران</div>
+    <h2 class="section-title">پایه‌ی معماری: اتاق پخش زنده به‌جای سوایپ ایستا</h2>
+    <p class="lede">پژوهش نشان داد سلیقه‌ی مشترک موسیقایی با رضایت رابطه همبستگی دارد (۸.۲ در برابر ۶.۸ در کیفیت ارتباط کلامی)، اما این سیگنال باید <b style="color:var(--cream)">تکرارشونده</b> باشد نه لحظه‌ای. بر همین اساس «اتاق‌های هم‌آهنگ» طراحی شد: کاتالوگ رایگان داخلی + پخش زنده + واکنش هم‌زمان چند نفر به یک آهنگ = «جرقه‌ی هم‌آهنگی».</p>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="num">پایه ۱</div><h4>کاتالوگ داخلی رایگان</h4><p>حذف کامل وابستگی به API خارجی — بزرگ‌ترین ضعف کل صنعت</p></div>
+      <div class="feat-card"><div class="num">پایه ۲</div><h4>اقتصاد بدون AdMob</h4><p>چون تبلیغ در ایران کم‌بازده است، پایه‌ی درآمد از ابتدا سکه/هدیه/اشتراک بود</p></div>
+      <div class="feat-card"><div class="num">پایه ۳</div><h4>احراز با موبایل ایرانی</h4><p>پاسخ مستقیم به مشکل فیک‌اکانت رقبا — حضور زنده در اتاق قابل جعل نیست</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 3: PAID ROOMS + INVITE LINKS -->
+<section class="section-pad" id="part3">
+  <div class="wrap">
+    <div class="eyebrow">۰۳ &nbsp;توسعه‌ی جدید</div>
+    <h2 class="section-title">اتاق‌های پولیِ شخصی‌سازی‌شده با لینک دعوت اختصاصی</h2>
+    <p class="lede">هر کاربر (نه فقط تیم اپ) می‌تواند با پرداخت یک مبلغ مشخص، اتاق اختصاصی خودش را بسازد و با یک لینک منحصربه‌فرد (`hamahang.ir/r/آیدی-دلخواه`) دیگران را به آن دعوت کند — این اتاق می‌تواند برای یک جمع دوستانه، یک کانال تلگرامی، یا یک ایونت خاص باشد.</p>
+    <div class="two-col">
+      <div>
+        <h3 class="sub-title">چرا این مدل جواب می‌دهد</h3>
+        <ul style="color:var(--dim); font-size:14.5px; padding-inline-start:20px;">
+          <li>اتاق پولی یعنی سازنده‌ی اتاق برایش «هزینه‌ی فرصت» گذاشته و آن را با جدیت مدیریت و تبلیغ می‌کند — کیفیت اتاق‌ها بالا می‌ماند</li>
+          <li>لینک اختصاصی یعنی ترافیک ورودی از کانال‌ها/گروه‌های شخصی افراد، بدون هزینه‌ی جذب کاربر برای خود اپ</li>
+          <li>هر عضو جدید که از لینک وارد شود، به‌صورت خودکار به سازنده‌ی اتاق و به برنامه‌ی افیلیت (بخش ۰۵) متصل می‌شود</li>
+        </ul>
+        <h3 class="sub-title" style="margin-top:22px;">سطوح قیمت‌گذاری اتاق</h3>
+        <div class="recap-list">
+          <div class="recap-row"><span class="name">اتاق کوچک (تا ۵۰ نفر)</span><span class="note">هزینه‌ی نمادین یک‌بار، برای جمع دوستانه/دورهمی</span></div>
+          <div class="recap-row"><span class="name">اتاق عمومی (بدون سقف)</span><span class="note">هزینه‌ی بالاتر + دسترسی به آمار ورود/خروج و درصد از هدیه‌های دریافتی</span></div>
+          <div class="recap-row"><span class="name">اتاق برند/رویداد</span><span class="note">قیمت مذاکره‌ای برای کانال‌ها و پیج‌های بزرگ، شامل لوگوی اختصاصی اتاق</span></div>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mtop"><span>ساخت اتاق اختصاصی</span><span class="live">پیش‌نمایش</span></div>
+        <div style="font-size:13px; color:var(--dim); margin-bottom:10px;">نام اتاق</div>
+        <div style="background:rgba(241,236,223,.06); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:14px; margin-bottom:14px;">جمعه‌شب پاپ فارسی 🎉</div>
+        <div style="font-size:13px; color:var(--dim); margin-bottom:10px;">لینک دعوت اختصاصی</div>
+        <div class="mono" style="background:rgba(241,236,223,.06); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:13px; margin-bottom:16px; color:var(--gold);">hamahang.ir/r/sara-jomeh</div>
+        <div class="gift-bubble">💳 هزینه‌ی ساخت: ۴۹,۰۰۰ تومان / تا ۳۰ روز فعال</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 4: IN-ROOM GIFTING -->
+<section class="section-pad" id="part4">
+  <div class="wrap">
+    <div class="eyebrow">۰۴ &nbsp;اقتصاد هدیه</div>
+    <h2 class="section-title">استیکر و هدیه‌ی درون‌برنامه‌ای بین کاربران اتاق</h2>
+    <p class="lede">داخل هر اتاق، کاربران می‌توانند برای یکدیگر استیکر، افکت صوتی-تصویری، یا «هدیه‌ی آهنگ» بفرستند — با سکه‌ی داخل‌برنامه‌ای که از قبل خریداری شده. این دقیقاً همان موتور درآمدی است که در اپ‌های صوتی/لایو منطقه (استارمیکر، بیگو، یلا) در بازارهای کم‌تبلیغ جواب داده.</p>
+    <div class="two-col">
+      <div class="mock">
+        <div class="mtop"><span>🌆 جمعه‌شب پاپ فارسی</span><span class="live">۱۸۴ نفر</span></div>
+        <div class="sticker-row">
+          <div class="sticker">🌹</div><div class="sticker">🔥</div><div class="sticker">🎧</div><div class="sticker">💛</div><div class="sticker">✨</div><div class="sticker">🎁</div>
+        </div>
+        <div class="gift-bubble">🎁 «آرمان» برای «نیلوفر» یک 🌹 فرستاد — روی صفحه‌ی همه نمایش داده شد</div>
+      </div>
+      <div>
+        <h3 class="sub-title">لایه‌های هدیه</h3>
+        <ul style="color:var(--dim); font-size:14.5px; padding-inline-start:20px;">
+          <li><b style="color:var(--cream)">استیکر ساده</b> — چند سکه، فقط برای طرف مقابل نمایش داده می‌شود</li>
+          <li><b style="color:var(--cream)">هدیه‌ی نمایشی</b> — روی صفحه‌ی کل اتاق پخش می‌شود (افکت انیمیشنی)، مناسب برای دیده‌شدن و رقابت اجتماعی</li>
+          <li><b style="color:var(--cream)">هدیه‌ی آهنگ</b> — گیرنده می‌تواند آهنگ هدیه‌گرفته را مستقیم به نوبت‌پخش زنده‌ی اتاق اضافه کند</li>
+        </ul>
+        <p style="color:var(--dim); font-size:14px;">۷۰٪ از ارزش هر هدیه به‌صورت سکه به حساب گیرنده برمی‌گردد (قابل تبدیل به اعتبار اتاق‌سازی یا برداشت پس از رسیدن به سقف مشخص) — انگیزه‌ی مضاعف برای ماندن و فعال‌بودن در اتاق.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 5: AFFILIATE -->
+<section class="section-pad" id="part5">
+  <div class="wrap">
+    <div class="eyebrow">۰۵ &nbsp;رشد از طریق مجاری تبلیغی</div>
+    <h2 class="section-title">برنامه‌ی افیلیت برای ادمین‌های کانال و پیج</h2>
+    <p class="lede">ادمین‌هایی که کانال تلگرام، اینستاگرام یا هر مجرای تبلیغی دیگری دارند، یک لینک ردیابی‌شده‌ی اختصاصی می‌گیرند. هر کاربری که از آن لینک جوین شود و در برنامه پرداخت انجام دهد (خرید سکه، اشتراک، یا ساخت اتاق)، درصدی از آن پرداخت به‌صورت خودکار به ادمین تعلق می‌گیرد.</p>
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-title">// نمونه‌ی داشبورد افیلیت</div>
+        <table class="aff-table">
+          <tr><th>ادمین/کانال</th><th>کاربران جوین‌شده</th><th>پرداخت‌کننده</th><th>درصد سهم</th></tr>
+          <tr><td>کانال موزیک پاپ</td><td>۱,۲۴۰</td><td>۹۸</td><td><span class="badge">۲۰٪</span></td></tr>
+          <tr><td>پیج معرفی اپ</td><td>۵۸۰</td><td>۴۱</td><td><span class="badge">۱۵٪</span></td></tr>
+          <tr><td>گروه دورهمی تهران</td><td>۲۱۰</td><td>۲۹</td><td><span class="badge">۲۵٪</span></td></tr>
+        </table>
+      </div>
+      <div>
+        <h3 class="sub-title">سطوح مشارکت</h3>
+        <ul style="color:var(--dim); font-size:14.5px; padding-inline-start:20px;">
+          <li><b style="color:var(--cream)">سطح پایه (خودکار)</b>: هر کاربر می‌تواند لینک دعوت خود را داشته باشد؛ سهم کوچک از اولین خرید دوستانش</li>
+          <li><b style="color:var(--cream)">سطح شریک تبلیغاتی</b>: ادمین‌های کانال با ترافیک اثبات‌شده، وارد قرارداد سهم بالاتر (۲۰–۲۵٪) از پرداخت‌های مکرر کاربرانشان (نه فقط خرید اول) می‌شوند</li>
+          <li><b style="color:var(--cream)">سطح رویداد/کمپین</b>: اتاق اختصاصی رایگان + کد تخفیف مشترک برای معرفی گروهی، مناسب کمپین‌های فصلی</li>
+        </ul>
+        <p style="color:var(--dim); font-size:14px;">این مدل دقیقاً همان چیزی است که کانال‌های تلگرامی ایرانی سال‌هاست با آن آشنا هستند (تبلیغ کدتخفیف/لینک‌دار) — فقط این‌بار خودِ اپ زیرساخت ردیابی و تسویه را می‌سازد، نه یک قرارداد دستی و غیرشفاف.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 6: PROGRESSIVE ONBOARDING FUNNEL -->
+<section class="section-pad" id="part6">
+  <div class="wrap">
+    <div class="eyebrow">۰۶ &nbsp;قیف ورود کاربر</div>
+    <h2 class="section-title">اول فقط شنونده، بعد عضو کامل</h2>
+    <p class="lede">کاربر تازه‌وارد بدون هیچ اصطکاکی وارد می‌شود و فقط شنونده است — این «لحظه‌ی آها»ی محصول (شنیدن موزیک در جمع) را قبل از هر درخواستی تجربه می‌کند. برای باز کردن اتاق‌های بیشتر و ورود به مچینگ، باید پروفایل را تکمیل کند.</p>
+    <div class="flow-row">
+      <div class="flow-step"><span class="tag">مرحله ۱</span>ورود بدون ثبت‌نام سنگین؛ فقط شنونده در ۱ تا ۲ اتاق عمومی</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">مرحله ۲</span>احراز با شماره موبایل (پیامک تأیید)</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">مرحله ۳</span>تکمیل پروفایل: نام، جنسیت، شهر، قد، علایق موسیقایی</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">مرحله ۴</span>باز شدن اتاق‌های نامحدود + شروع مچینگ</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">مرحله ۵</span>دسترسی به هدیه، ساخت اتاق، جست‌وجوی مستقیم (ویژه)</div>
+    </div>
+    <div class="chart-card" style="margin-top:24px;">
+      <div class="chart-title">// نرخ عبور تخمینی از هر مرحله‌ی قیف (بر اساس الگوهای معمول اپ‌های مشابه)</div>
+      <canvas id="funnelChart" height="110"></canvas>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 7: ASYMMETRIC MATCHING -->
+<section class="section-pad" id="part7">
+  <div class="wrap">
+    <div class="eyebrow">۰۷ &nbsp;مچینگ نامتقارن</div>
+    <h2 class="section-title">خانم‌ها آزادانه پیام می‌دهند؛ آقایان با «شروع‌کننده‌ی هوشمند»</h2>
+    <p class="lede">این مدل مستقیماً از داده‌ی Bumble الهام گرفته شده، اما برای تعادل بهتر تنظیم شده: در Bumble نرخ مچ خانم‌ها ۴۵٪ و آقایان تنها ۳٪ است، و همین قانون «زن شروع می‌کند» باعث کاهش ۷۰٪ در شکایت از پیام‌های نامناسب شد. در «هم‌آهنگ» این ایده کمی تعدیل شده تا هم امنیت خانم‌ها حفظ شود و هم آقایان مسیر فعال‌تری داشته باشند.</p>
+    <div class="gender-grid">
+      <div class="gender-card women"><h4>👩 برای خانم‌ها</h4><ul>
+        <li>می‌توانند از روز اول به هرکسی در اتاق یا نتایج جست‌وجو پیام بدهند — بدون محدودیت</li>
+        <li>پیام‌های دریافتی از آقایانِ عادی، به‌صورت درخواست در صف انتظار می‌آید تا خودشان انتخاب کنند</li>
+        <li>کنترل کامل روی اینکه مکالمه با چه کسی و چه زمانی ادامه پیدا کند</li>
+      </ul></div>
+      <div class="gender-card men"><h4>👨 برای آقایان</h4><ul>
+        <li>در حالت عادی، مچینگ از دل اتاق و واکنش مشترک اتفاق می‌افتد (بدون نیاز به پیام مستقیم)</li>
+        <li>کاربران ویژه (اشتراک) می‌توانند در کل کاربران جست‌وجو کنند و یک <b>پیام آماده‌ی هوشمند</b> (متنی که بر اساس علایق مشترک طرف مقابل پیشنهاد می‌شود) بفرستند</li>
+        <li>این پیام فقط در صورت پذیرش خانم، به مکالمه‌ی کامل تبدیل می‌شود — جلوگیری از اسپم و افزایش کیفیت شروع مکالمه</li>
+      </ul></div>
+    </div>
+    <div class="chart-card" style="margin-top:22px;">
+      <div class="chart-title">// نرخ مچ در Bumble به تفکیک جنسیت — الگوی مرجع طراحی</div>
+      <canvas id="genderChart" height="120"></canvas>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 8: MINI GAMES -->
+<section class="section-pad" id="part8">
+  <div class="wrap">
+    <div class="eyebrow">۰۸ &nbsp;لایه‌ی سرگرمی</div>
+    <h2 class="section-title">بازی‌های ساده برای وقت‌گذرانی و یخ‌شکنی</h2>
+    <p class="lede">در فاصله‌ی بین آهنگ‌ها یا داخل چت مچ‌شده، بازی‌های سبک و سریع — بدون نیاز به مهارت خاص — نرخ بازگشت روزانه را بالا نگه می‌دارند و بهانه‌ی طبیعی برای شروع گفت‌وگو می‌سازند.</p>
+    <div class="game-grid">
+      <div class="game-card"><div class="ic">🎵</div><div class="t">حدس آهنگ</div><div class="d">۳ ثانیه از یک آهنگ پخش می‌شود، سریع‌ترین حدس امتیاز می‌گیرد</div></div>
+      <div class="game-card"><div class="ic">💭</div><div class="t">کوییز حس‌وحال</div><div class="d">سؤال دونفره‌ی سریع بعد از مچ؛ نتیجه سازگاری را به شکل بازی نشان می‌دهد</div></div>
+      <div class="game-card"><div class="ic">🎤</div><div class="t">این خط از کیه؟</div><div class="d">یک تکه از متن آهنگ نمایش داده می‌شود، باید خواننده را حدس بزنند</div></div>
+      <div class="game-card"><div class="ic">🃏</div><div class="t">بازی سؤال‌وجواب</div><div class="d">کارت‌های سؤال سبک برای شکستن سکوت اول مکالمه در چت</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 9: AI COMPANIONS -->
+<section class="section-pad" id="part9">
+  <div class="wrap">
+    <div class="eyebrow">۰۹ &nbsp;دستیار هوش مصنوعی برای شروع ارتباط</div>
+    <h2 class="section-title">دو دستیار مکالمه (خانم و آقا) برای تمرین قبل از گفت‌وگوی واقعی</h2>
+    <p class="lede">پژوهش‌های اخیر روی اپ‌های کمک‌مکالمه‌ی هوش مصنوعی نشان می‌دهند این ابزارها می‌توانند مثل «تمرین قبل از میدان واقعی» عمل کنند — تمرین گفت‌وگو در محیطی بدون قضاوت، پیش از ورود به مکالمه‌ی واقعی. چند اپ (مثل Swipey AI) دقیقاً همین را در قالب یک رابط شبیه اپ دیتینگ عرضه کرده‌اند تا قدم اول کمتر ترسناک باشد.</p>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <div class="ai-avatar" style="background:linear-gradient(135deg,var(--coral),var(--gold));">👩</div>
+        <h4 style="margin:0 0 8px;">دستیار «آوا»</h4>
+        <p style="color:var(--dim); font-size:14px;">برای کاربران آقا که از شروع مکالمه با یک خانم واقعی می‌ترسند. آوا با لحن دوستانه و صبور، گفت‌وگوی نمونه تمرین می‌کند: چطور خودتان را معرفی کنید، چطور درباره‌ی موزیک مشترک سؤال بپرسید، چطور با رد شدن یا سکوت طرف مقابل کنار بیایید.</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-avatar" style="background:linear-gradient(135deg,var(--violet),var(--teal));">👨</div>
+        <h4 style="margin:0 0 8px;">دستیار «آرمان»</h4>
+        <p style="color:var(--dim); font-size:14px;">برای کاربران خانم که می‌خواهند پیش از شروع مکالمه با یک آقای واقعی، اعتمادبه‌نفس بگیرند یا لحن پیام‌شان را محک بزنند — به‌ویژه در مدل مچینگ فعلی که خانم‌ها اولین‌قدم را برمی‌دارند.</p>
+      </div>
+    </div>
+    <div class="note-box">
+      <b>نکته‌ی طراحی مهم:</b> این دستیارها باید صریحاً به‌عنوان «اتاق تمرین» معرفی شوند، نه جایگزین ارتباط واقعی — پژوهش‌ها هشدار می‌دهند وابستگی احساسی به یک هوش مصنوعی می‌تواند نتیجه‌ی معکوس بدهد. طراحی باید کاربر را فعالانه به سمت گفت‌وگوی واقعی در اتاق‌ها هل بدهد (مثلاً با پیشنهاد «حالا همین را با یک آدم واقعی در اتاق امتحان کن»)، نه اینکه او را در گفت‌وگو با ربات نگه دارد.
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PART 10: SUMMARY -->
+<section class="section-pad" id="part10">
+  <div class="wrap">
+    <div class="eyebrow">۱۰ &nbsp;جمع‌بندی</div>
+    <h2 class="section-title">نقشه‌ی کامل مدل درآمدی هم‌آهنگ</h2>
+    <p class="lede">شش منبع درآمد مستقل، بدون هیچ وابستگی به AdMob یا شبکه‌ی تبلیغاتی خارجی — هرکدام یک رفتار متفاوت کاربر را پول‌سازی می‌کند.</p>
+    <div class="chart-card">
+      <div class="chart-title">// ترکیب نهایی منابع درآمد</div>
+      <canvas id="finalRevChart" height="130"></canvas>
+    </div>
+    <div class="feat-grid" style="margin-top:24px;">
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: وابستگی به API</h4><p>کاتالوگ داخلی و رایگان</p></div>
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: فیک‌اکانت</h4><p>احراز موبایل + حضور زنده در اتاق</p></div>
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: مچینگ خشک</h4><p>جرقه‌ی هم‌آهنگی از سیگنال تکراری</p></div>
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: تک‌مدلی درآمد</h4><p>۶ جریان درآمدی مستقل هم‌زمان</p></div>
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: نبود AdMob</h4><p>اقتصاد سکه/هدیه/اشتراک/افیلیت</p></div>
+      <div class="feat-card"><div class="num">✓</div><h4>حل شد: ترس از شروع مکالمه</h4><p>دستیار هوش مصنوعی برای تمرین</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>این سند ترکیبی از سه مرحله‌ی تحقیق است: تحلیل بازار جهانی، بازطراحی برای ایران و کافه بازار، و گسترش مدل کاری/کاربری بر اساس اقتصاد اتاق، هدیه، افیلیت و دستیار هوش مصنوعی. اعداد مربوط به Bumble از گزارش‌های عمومی صنعت نقل شده‌اند؛ سایر اعداد قیمت/درصد، پیشنهادی و قابل تنظیم بر اساس تست بازار واقعی‌اند.</p>
+  </div>
+</footer>
+
+<script>
+Chart.defaults.color = '#9C93C2';
+Chart.defaults.font.family = "'Space Mono', monospace";
+Chart.defaults.borderColor = '#322C52';
+
+new Chart(document.getElementById('funnelChart'), {
+  type:'bar',
+  data:{
+    labels:['ورود (شنونده)','تأیید موبایل','تکمیل پروفایل','فعال در مچینگ','خرید اول (سکه/اشتراک)'],
+    datasets:[{ data:[100,58,41,30,9], backgroundColor:['#8B7CF0','#4FC2B4','#4FC2B4','#E7A93F','#E8637A'], borderRadius:8 }]
+  },
+  options:{ plugins:{legend:{display:false}}, scales:{y:{grid:{color:'#322C52'}, ticks:{callback:v=>v+'%'}}, x:{grid:{display:false}}} }
+});
+
+new Chart(document.getElementById('genderChart'), {
+  type:'bar',
+  data:{
+    labels:['نرخ مچ خانم‌ها','نرخ مچ آقایان'],
+    datasets:[{ data:[45,3], backgroundColor:['#E8637A','#8B7CF0'], borderRadius:8, barThickness:60 }]
+  },
+  options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{grid:{color:'#322C52'}, ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}} }
+});
+
+new Chart(document.getElementById('finalRevChart'), {
+  type:'doughnut',
+  data:{
+    labels:['هدیه‌ی درون‌اتاقی','اشتراک VIP ماهانه','ساخت اتاق پولی','افیلیت/کمپین کانال‌ها','جست‌وجوی ویژه + پیام هوشمند','سایر (بازی/محتوا)'],
+    datasets:[{ data:[32,24,18,12,10,4], backgroundColor:['#E7A93F','#8B7CF0','#4FC2B4','#E8637A','#9C93C2','#5b5480'], borderColor:'#1D1933', borderWidth:4 }]
+  },
+  options:{ plugins:{legend:{position:'bottom', labels:{boxWidth:12,padding:12,font:{family:"'Vazirmatn'", size:11.5}}}} }
+});
+</script>
+</body>
+</html>

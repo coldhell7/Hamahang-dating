@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هم‌آهنگ | معماری اپ برای تیم طراحی — راهنمای اجرا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#100E1C; --bg-soft:#17142A; --panel:#1D1933; --line:#322C52;
+    --cream:#F1ECDF; --dim:#9C93C2;
+    --primary:#8B5CF6; --primary-dark:#6E3FD9; --primary-soft:rgba(139,92,246,.14);
+    --gold:#E7A93F; --coral:#E8637A; --teal:#4FC2B4;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--cream);font-family:'Vazirmatn',sans-serif;line-height:1.85;}
+  .mono{font-family:'Space Mono',monospace;direction:ltr;unicode-bidi:isolate;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px;}
+  .section-pad{padding:70px 0;}
+  @media(max-width:700px){.section-pad{padding:46px 0;}}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--primary);text-transform:uppercase;margin-bottom:16px;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--primary);}
+  h2.section-title{font-size:clamp(22px,3.2vw,36px);font-weight:800;margin:0 0 14px;color:var(--cream);}
+  h3.sub-title{font-size:19px;font-weight:700;margin:0 0 10px;color:var(--cream);}
+  .lede{color:var(--dim);font-size:15.5px;max-width:780px;margin:0 0 32px;}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);}
+  a{color:var(--primary);}
+
+  .toc{position:sticky; top:0; z-index:20; background:rgba(16,14,28,.94); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .toc-row{display:flex; gap:6px; overflow-x:auto; padding:14px 28px; max-width:1200px; margin:0 auto;}
+  .toc-row a{white-space:nowrap; font-size:12.5px; color:var(--dim); text-decoration:none; border:1px solid var(--line); border-radius:100px; padding:7px 14px; font-family:'Space Mono',monospace;}
+  .toc-row a:hover{color:var(--primary); border-color:var(--primary);}
+
+  .hero{padding:64px 0 46px; border-bottom:1px solid var(--line);
+    background:radial-gradient(ellipse 900px 460px at 85% -20%, rgba(139,92,246,.28), transparent 60%), var(--bg);}
+  .hero h1{font-size:clamp(28px,4.6vw,48px); font-weight:900; margin:0 0 16px; line-height:1.25;}
+  .hero h1 em{font-style:normal; color:var(--primary);}
+  .hero p{color:var(--dim); font-size:16px; max-width:740px;}
+  .part-badge{display:inline-flex; gap:8px; font-family:'Space Mono',monospace; font-size:11px; color:var(--teal); border:1px solid var(--teal); border-radius:100px; padding:5px 12px; margin-inline-end:8px; margin-bottom:6px;}
+
+  .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.feat-grid{grid-template-columns:1fr;}}
+  .feat-card{background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px;}
+  .feat-card .num{font-family:'Space Mono',monospace; color:var(--primary); font-size:12.5px;}
+  .feat-card h4{margin:9px 0 8px; font-size:16px;}
+  .feat-card p{margin:0; font-size:13.6px; color:var(--dim);}
+
+  .flow-row{display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; justify-content:center;}
+  .flow-step{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px 18px; font-size:13.5px; text-align:center; min-width:140px; max-width:180px;}
+  .flow-step .tag{display:block; font-family:'Space Mono',monospace; font-size:10.5px; color:var(--teal); margin-bottom:6px;}
+  .flow-arrow{align-self:center; color:var(--primary); font-size:18px;}
+
+  /* palette swatches */
+  .swatch-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .swatch{width:150px;}
+  .swatch .chip{height:70px; border-radius:14px; border:1px solid var(--line); margin-bottom:8px;}
+  .swatch .name{font-size:13px; font-weight:700;}
+  .swatch .hex{font-family:'Space Mono',monospace; font-size:11.5px; color:var(--dim);}
+
+  /* phone mockups */
+  .phone-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px;}
+  @media(max-width:1000px){.phone-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.phone-grid{grid-template-columns:1fr;}}
+  .phone-block{background:var(--panel); border:1px solid var(--line); border-radius:22px; padding:18px; display:flex; flex-direction:column; align-items:center;}
+  .phone-tag{font-family:'Space Mono',monospace; font-size:11px; color:var(--primary); margin-bottom:12px; text-align:center;}
+  .phone-frame{width:264px; height:540px; background:#0B0A16; border:6px solid #050409; border-radius:34px; overflow:hidden; box-shadow:0 18px 44px rgba(0,0,0,.55); position:relative; display:flex; flex-direction:column;}
+  .phone-caption{margin-top:12px; font-size:12.5px; color:var(--dim); text-align:center; max-width:250px;}
+
+  .app-header{display:flex; align-items:center; justify-content:space-between; padding:12px 12px 8px; flex-shrink:0;}
+  .app-header .avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--coral));}
+  .app-header .logo{font-weight:800; font-size:14px; color:var(--primary);}
+  .app-header .ic{width:16px;height:16px;border:1.4px solid var(--dim); border-radius:4px;}
+
+  .pill-row{display:flex; gap:6px; padding:0 12px 10px; flex-shrink:0; overflow-x:auto;}
+  .pill{font-size:9.5px; border:1px solid var(--line); border-radius:100px; padding:5px 9px; white-space:nowrap; color:var(--cream);}
+  .pill.on{background:var(--primary-soft); border-color:var(--primary); color:var(--primary);}
+
+  .scr-body{flex:1; overflow-y:auto; padding:0 12px 10px;}
+
+  .hero-card{border:1px solid var(--primary); border-radius:16px; padding:10px; margin-bottom:10px; background:radial-gradient(ellipse at top, rgba(139,92,246,.18), transparent 70%);}
+  .hero-card .top{font-size:11px; font-weight:700; margin-bottom:4px;}
+  .hero-card .sub{font-size:9px; color:var(--dim); margin-bottom:8px;}
+  .hero-thumbs{display:grid; grid-template-columns:repeat(3,1fr); gap:5px;}
+  .hero-thumbs div{height:34px; border-radius:8px; background:linear-gradient(135deg,#2b2450,#191531);}
+  .cta-btn{margin-top:8px; background:var(--primary); color:#fff; text-align:center; font-size:10.5px; font-weight:700; border-radius:100px; padding:8px; }
+  .cta-btn.ghost{background:transparent; border:1px solid var(--primary); color:var(--primary);}
+
+  .mini-tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:10px;}
+  .mini-tile{background:var(--bg-soft); border:1px solid var(--line); border-radius:12px; padding:8px 4px; text-align:center; font-size:8.6px;}
+  .mini-tile .ic{font-size:15px; margin-bottom:3px;}
+
+  .room-card{display:flex; gap:8px; border:1px solid var(--line); border-radius:12px; padding:6px; margin-bottom:7px; align-items:center;}
+  .room-card .art{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#3a2e6b,#1b1730); flex-shrink:0;}
+  .room-card .info{flex:1; min-width:0;}
+  .room-card .t{font-size:10.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .room-card .s{font-size:9px; color:var(--dim);}
+  .room-card .n{font-size:9px; color:var(--primary); font-family:'Space Mono',monospace;}
+
+  .bottom-nav{display:flex; justify-content:space-around; border-top:1px solid var(--line); padding:8px 2px 10px; background:var(--bg); flex-shrink:0;}
+  .nav-item{display:flex; flex-direction:column; align-items:center; gap:3px; font-size:7.6px; color:var(--dim);}
+  .nav-item .dot{width:16px; height:16px; border-radius:5px; border:1.4px solid currentColor;}
+  .nav-item.active{color:var(--primary);}
+
+  .msg-bubble{max-width:75%; padding:7px 10px; border-radius:12px; font-size:10px; margin-bottom:6px;}
+  .msg-bubble.in{background:var(--bg-soft); border:1px solid var(--line); align-self:flex-start;}
+  .msg-bubble.out{background:var(--primary); color:#fff; align-self:flex-end; margin-inline-start:auto;}
+  .msg-col{display:flex; flex-direction:column;}
+  .pending-row{display:flex; align-items:center; gap:6px; border:1px dashed var(--primary); border-radius:10px; padding:6px 8px; font-size:9px; color:var(--primary); margin-bottom:8px;}
+
+  .filter-block{margin-bottom:14px;}
+  .filter-label{display:flex; justify-content:space-between; font-size:10px; margin-bottom:5px;}
+  .filter-label .badge-vip{font-size:7px; background:var(--primary); color:#fff; border-radius:5px; padding:1px 5px;}
+  .track-check{display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); border-radius:9px; padding:7px 9px; font-size:9.5px; margin-bottom:6px;}
+  .track-check .box{width:14px;height:14px;border:1.4px solid var(--primary); border-radius:4px; background:var(--primary-soft); display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:9px;}
+  .slider-track{height:3px; background:var(--line); border-radius:3px; position:relative; margin:6px 0;}
+  .slider-track .fill{position:absolute; inset:0; background:var(--primary); border-radius:3px;}
+  .slider-track .dot{width:10px;height:10px;background:var(--primary); border-radius:50%; position:absolute; top:50%; transform:translateY(-50%);}
+
+  .sticker-mini{display:flex; gap:5px; margin:8px 0;}
+  .sticker-mini span{width:22px;height:22px;border-radius:6px;background:rgba(241,236,223,.06); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:11px;}
+  .gift-toast{background:linear-gradient(135deg, rgba(139,92,246,.22), rgba(232,99,122,.16)); border:1px solid var(--primary); border-radius:10px; padding:6px 8px; font-size:8.6px;}
+
+  .coin-tile{display:flex; justify-content:space-between; align-items:center; border:1px solid var(--line); border-radius:10px; padding:8px 10px; margin-bottom:7px; font-size:10px;}
+  .coin-tile .price{font-family:'Space Mono',monospace; color:var(--primary); font-size:10px;}
+
+  .ai-bubble-row{display:flex; align-items:flex-start; gap:6px; margin-bottom:8px;}
+  .ai-avatar-sm{width:24px;height:24px;border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px;}
+
+  .aff-mini-row{display:flex; justify-content:space-between; font-size:9px; border-bottom:1px solid var(--line); padding:6px 2px;}
+
+  .game-tile{border:1px solid var(--line); border-radius:10px; padding:8px; text-align:center; font-size:9px; margin-bottom:7px;}
+
+  .nav-table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  .nav-table th{font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--dim); text-align:right; padding:10px 12px; border-bottom:1px solid var(--line);}
+  .nav-table td{padding:12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  .nav-table tr:last-child td{border-bottom:none;}
+
+  .note-box{background:rgba(139,92,246,.08); border:1px solid rgba(139,92,246,.35); border-radius:14px; padding:16px 20px; font-size:13.5px; color:var(--dim); margin-top:18px;}
+  .note-box b{color:var(--primary);}
+
+  .checklist{display:grid; grid-template-columns:1fr 1fr; gap:10px 24px;}
+  @media(max-width:700px){.checklist{grid-template-columns:1fr;}}
+  .checklist label{display:flex; gap:8px; font-size:14px; color:var(--dim); align-items:flex-start;}
+  .checklist input{margin-top:4px; accent-color:var(--primary);}
+
+  footer{padding:44px 0 60px; text-align:center; color:var(--dim); font-size:13px;}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-row">
+    <a href="#ia">۰۱ نقشه‌ی اطلاعات (IA)</a>
+    <a href="#design-tokens">۰۲ زبان بصری</a>
+    <a href="#nav">۰۳ ناوبری پایین</a>
+    <a href="#screens">۰۴ صفحه‌به‌صفحه</a>
+    <a href="#components">۰۵ کامپوننت‌ها</a>
+    <a href="#handoff">۰۶ نکات تحویل به طراح</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div><span class="part-badge">راهنمای معماری UI برای تیم طراحی</span></div>
+    <h1>هم‌آهنگ: از مدل کسب‌وکار تا <em>نقشه‌ی کامل صفحات</em></h1>
+    <p>این سند برای تیم طراحی است، نه برای سرمایه‌گذار. مبنای آن گزارش مدل کسب‌وکار (نسخه‌ی ۳) است که قبلاً آماده شده؛ اینجا هر بخش از آن مدل — اتاق، هدیه، افیلیت، قیف ورود، مچینگ نامتقارن، بازی‌ها، دستیار هوش مصنوعی — به یک یا چند <b style="color:var(--cream)">صفحه‌ی واقعی</b> ترجمه شده است. سبک بصری از اسکرین‌شات‌های رقیب (makromusic) الگو گرفته شده — همان ساختار کارت‌ها، چیپ‌های فیلتر، نوار پایین و اسلایدرهای فیلتر — اما رنگ پایه از فیروزه‌ای به <b style="color:var(--primary)">بنفش (Violet #8B5CF6)</b> تغییر کرده تا هویت بصری هم‌آهنگ مستقل و قابل‌تشخیص باشد.</p>
+  </div>
+</section>
+
+<!-- IA -->
+<section class="section-pad" id="ia">
+  <div class="wrap">
+    <div class="eyebrow">۰۱ &nbsp;نقشه‌ی اطلاعات</div>
+    <h2 class="section-title">مسیر کاربر از ورود تا مچ — همه‌ی صفحات یک‌جا</h2>
+    <p class="lede">این مسیر دقیقاً همان قیف تدریجی بخش ۰۶ گزارش قبلی است، فقط این‌بار هر مرحله با نام صفحه‌ی واقعی که طراح باید بسازد مشخص شده.</p>
+    <div class="flow-row">
+      <div class="flow-step"><span class="tag">Splash</span>معرفی کوتاه اپ + ورود مستقیم به حالت شنونده</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">Explore (خانه)</span>لیست اتاق‌های زنده، بدون نیاز به ثبت‌نام</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">Auth</span>ورود با شماره موبایل + کد پیامکی</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">Profile Setup</span>نام، جنسیت، شهر، قد، سلیقه‌ی موسیقی</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-step"><span class="tag">Full App</span>باز شدن ناوبری کامل: مچینگ، پیام، هدیه، ساخت اتاق</div>
+    </div>
+    <h3 class="sub-title" style="margin-top:36px;">فهرست کامل صفحات (بر اساس بخش‌های گزارش)</h3>
+    <table class="nav-table">
+      <tr><th>گروه</th><th>صفحات</th><th>بخش مرتبط در گزارش مدل</th></tr>
+      <tr><td>ورود و قیف</td><td>Splash، Explore عمومی، احراز موبایل، تکمیل پروفایل</td><td>۰۶ قیف ورود</td></tr>
+      <tr><td>اتاق‌ها</td><td>Explore/خانه، جزئیات اتاق زنده، ساخت اتاق پولی + لینک دعوت</td><td>۰۲ و ۰۳</td></tr>
+      <tr><td>مچینگ</td><td>همخوانی/Instant Match، فیلترهای مچ، پروفایل عمومی کاربر</td><td>۰۲ و ۰۷</td></tr>
+      <tr><td>گفتگو</td><td>لیست پیام‌ها، صف درخواست (برای خانم‌ها)، چت مچ‌شده</td><td>۰۷ مچینگ نامتقارن</td></tr>
+      <tr><td>اقتصاد اپ</td><td>فروشگاه سکه، پنل هدیه‌ی درون‌اتاقی، اشتراک/ارتقا</td><td>۰۴ هدیه و ۱۰ جمع‌بندی درآمد</td></tr>
+      <tr><td>رشد</td><td>داشبورد افیلیت، لینک اختصاصی من</td><td>۰۵ افیلیت</td></tr>
+      <tr><td>سرگرمی</td><td>لایه‌ی بازی داخل اتاق/چت</td><td>۰۸ بازی‌ها</td></tr>
+      <tr><td>هوش مصنوعی</td><td>چت با آوا/آرمان (دستیار تمرین مکالمه)</td><td>۰۹ دستیار AI</td></tr>
+      <tr><td>پروفایل</td><td>پروفایل من، تنظیمات، سطح اشتراک</td><td>عمومی</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- DESIGN TOKENS -->
+<section class="section-pad" id="design-tokens">
+  <div class="wrap">
+    <div class="eyebrow">۰۲ &nbsp;زبان بصری</div>
+    <h2 class="section-title">رنگ پایه: بنفش — به‌جای فیروزه‌ای رفرنس</h2>
+    <p class="lede">ساختار کارت‌ها، چیپ‌ها، اسلایدرها و نوار پایین دقیقاً از عکس‌های رفرنس گرفته شده؛ فقط پالت رنگی عوض شده. پس‌زمینه تیره می‌ماند (سازگار با هویت فعلی هم‌آهنگ)، ولی همه‌ی حالت‌های "انتخاب‌شده/فعال/دکمه‌ی اصلی" که در رفرنس فیروزه‌ای بودند، اینجا بنفش‌اند.</p>
+    <div class="swatch-row">
+      <div class="swatch"><div class="chip" style="background:var(--primary);"></div><div class="name">بنفش اصلی</div><div class="hex mono">#8B5CF6</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--primary-dark);"></div><div class="name">بنفش تیره (فشرده/Pressed)</div><div class="hex mono">#6E3FD9</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--primary-soft); border:1px solid var(--primary);"></div><div class="name">بنفش کم‌رنگ (پس‌زمینه‌ی چیپ فعال)</div><div class="hex mono">rgba(139,92,246,.14)</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--bg);"></div><div class="name">پس‌زمینه‌ی اصلی</div><div class="hex mono">#100E1C</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--panel);"></div><div class="name">پنل/کارت</div><div class="hex mono">#1D1933</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--coral);"></div><div class="name">رنگ کمکی هدیه/لایو</div><div class="hex mono">#E8637A</div></div>
+      <div class="swatch"><div class="chip" style="background:var(--gold);"></div><div class="name">رنگ کمکی سکه/جایزه</div><div class="hex mono">#E7A93F</div></div>
+    </div>
+    <div class="note-box">
+      <b>قانون استفاده از بنفش:</b> بنفش فقط برای عناصر «فعال/انتخاب‌شده/CTA اصلی» استفاده شود (تب فعال، دکمه‌ی اصلی، حلقه‌ی دور آواتار لایو، اسلایدر مچ). برای «هدیه» رنگ صورتی-کورال و برای «سکه/جایزه» طلایی حفظ شود تا سه اقتصاد اپ (مچینگ / هدیه / سکه) در رنگ از هم قابل‌تشخیص بمانند. تایپوگرافی: Vazirmatn برای فارسی، Space Mono برای اعداد/آیدی‌های لینک دعوت.
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- BOTTOM NAV -->
+<section class="section-pad" id="nav">
+  <div class="wrap">
+    <div class="eyebrow">۰۳ &nbsp;ناوبری اصلی</div>
+    <h2 class="section-title">۶ تب پایین صفحه — معادل هم‌آهنگ برای هر تب رفرنس</h2>
+    <table class="nav-table">
+      <tr><th>تب رفرنس</th><th>معادل در هم‌آهنگ</th><th>محتوا</th></tr>
+      <tr><td>Explore</td><td><b style="color:var(--cream)">کاوش</b></td><td>لیست اتاق‌های زنده + اتاق ویژه/اسپانسری + دکمه‌ی مچ سریع</td></tr>
+      <tr><td>Compatibility</td><td><b style="color:var(--cream)">همخوانی</b></td><td>افرادی که هم‌زمان به همان آهنگ/خواننده گوش می‌دهند («جرقه‌ی هم‌آهنگی»)</td></tr>
+      <tr><td>Matches</td><td><b style="color:var(--cream)">مچ‌ها</b></td><td>لیست مچ‌های تأییدشده + اتاق‌های شخصی من</td></tr>
+      <tr><td>Likes</td><td><b style="color:var(--cream)">پسندها</b></td><td>لایک‌های دریافتی (برای خانم‌ها: صف درخواست پیام آقایان)</td></tr>
+      <tr><td>Upgrade</td><td><b style="color:var(--cream)">ارتقا</b></td><td>اشتراک VIP + فروشگاه سکه در یک صفحه</td></tr>
+      <tr><td>Messages</td><td><b style="color:var(--cream)">پیام‌ها</b></td><td>چت‌های فعال + دسترسی به دستیار AI (آوا/آرمان) از بالای همین صفحه</td></tr>
+    </table>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- SCREENS -->
+<section class="section-pad" id="screens">
+  <div class="wrap">
+    <div class="eyebrow">۰۴ &nbsp;صفحه‌به‌صفحه</div>
+    <h2 class="section-title">وایرفریم هر صفحه — ساختار از رفرنس، رنگ از هم‌آهنگ</h2>
+    <p class="lede">این وایرفریم‌ها ساختار و چیدمان دقیق هستند، نه دیزاین نهایی پیکسل‌پرفکت. تیم طراحی روی همین اسکلت، تایپوگرافی/آیکن/الوستریشن نهایی را اجرا می‌کند.</p>
+
+    <div class="phone-grid">
+
+      <!-- Explore -->
+      <div class="phone-block">
+        <div class="phone-tag">۱ · کاوش (خانه)</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="avatar"></div><div class="logo">هم‌آهنگ</div><div class="ic"></div></div>
+          <div class="pill-row">
+            <div class="pill on">🎵 سبک موسیقی</div><div class="pill">🔥 پرشنونده‌ها</div><div class="pill">📍 نزدیک من</div>
+          </div>
+          <div class="scr-body">
+            <div class="hero-card">
+              <div class="top">رادیوی ویژه · اتاق اسپانسری</div>
+              <div class="sub">پلی‌لیست هم‌آهنگ</div>
+              <div class="hero-thumbs"><div></div><div></div><div></div></div>
+              <div class="cta-btn">مچ سریع</div>
+            </div>
+            <div class="mini-tiles">
+              <div class="mini-tile"><div class="ic">⚡</div>مچ سریع</div>
+              <div class="mini-tile"><div class="ic">🎁</div>کسب سکه</div>
+              <div class="mini-tile"><div class="ic">🚀</div>تقویت پروفایل</div>
+            </div>
+            <div style="font-size:10px;color:var(--dim);margin-bottom:6px;">اتاق‌های در حال پخش</div>
+            <div class="room-card"><div class="art"></div><div class="info"><div class="t">جمعه‌شب پاپ فارسی</div><div class="s">۱۸۴ نفر آنلاین</div></div><div class="n">زنده</div></div>
+            <div class="room-card"><div class="art"></div><div class="info"><div class="t">سنتی و آرام</div><div class="s">۴۲ نفر آنلاین</div></div><div class="n">زنده</div></div>
+            <div class="room-card"><div class="art"></div><div class="info"><div class="t">اتاق سارا · دورهمی</div><div class="s">اتاق شخصی · پولی</div></div><div class="n">VIP</div></div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item active"><div class="dot"></div>کاوش</div>
+            <div class="nav-item"><div class="dot"></div>همخوانی</div>
+            <div class="nav-item"><div class="dot"></div>مچ‌ها</div>
+            <div class="nav-item"><div class="dot"></div>پسندها</div>
+            <div class="nav-item"><div class="dot"></div>ارتقا</div>
+            <div class="nav-item"><div class="dot"></div>پیام‌ها</div>
+          </div>
+        </div>
+        <div class="phone-caption">معادل بنفش صفحه‌ی اول اسکرین‌شات رفرنس — چیپ‌ها، کارت اسپانسری و نوار پایین همان ساختار، رنگ فیروزه‌ای→بنفش.</div>
+      </div>
+
+      <!-- Room detail / live -->
+      <div class="phone-block">
+        <div class="phone-tag">۲ · جزئیات اتاق زنده</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="ic"></div><div class="logo">جمعه‌شب پاپ فارسی</div><div style="font-size:9px;color:var(--coral);">🔴 ۱۸۴</div></div>
+          <div class="scr-body">
+            <div class="hero-card" style="text-align:center;">
+              <div style="width:70px;height:70px;border-radius:50%;margin:0 auto 8px;background:linear-gradient(135deg,#2b2450,#191531); border:2px solid var(--primary);"></div>
+              <div class="top">در حال پخش: فرانسیز</div>
+              <div class="sub">اوگور بالوغلو</div>
+            </div>
+            <div style="font-size:10px;color:var(--dim);margin-bottom:4px;">هدیه بفرست</div>
+            <div class="sticker-mini"><span>🌹</span><span>🔥</span><span>🎧</span><span>💜</span><span>🎁</span></div>
+            <div class="gift-toast">🎁 آرمان برای نیلوفر یک 🌹 فرستاد</div>
+            <div style="margin-top:10px;font-size:10px;color:var(--dim);">حاضرین اتاق</div>
+            <div class="mini-tiles" style="margin-top:6px;">
+              <div class="mini-tile">👤 نیلوفر</div><div class="mini-tile">👤 آرمان</div><div class="mini-tile">👤 +۱۸۱</div>
+            </div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;">
+            <div class="cta-btn ghost" style="width:70%;">پیوستن به گفتگو</div>
+          </div>
+        </div>
+        <div class="phone-caption">اقتصاد هدیه‌ی بخش ۰۴: استیکر، هدیه‌ی نمایشی روی صفحه‌ی کل اتاق، هدیه‌ی آهنگ.</div>
+      </div>
+
+      <!-- Room creation -->
+      <div class="phone-block">
+        <div class="phone-tag">۳ · ساخت اتاق اختصاصی</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="ic">✕</div><div class="logo">ساخت اتاق</div><div style="width:16px;"></div></div>
+          <div class="scr-body">
+            <div style="font-size:10px;color:var(--dim);margin-bottom:5px;">نام اتاق</div>
+            <div style="background:var(--bg-soft);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:10.5px;margin-bottom:12px;">جمعه‌شب پاپ فارسی 🎉</div>
+            <div style="font-size:10px;color:var(--dim);margin-bottom:5px;">لینک دعوت اختصاصی</div>
+            <div class="mono" style="background:var(--bg-soft);border:1px solid var(--primary);border-radius:9px;padding:8px 10px;font-size:9.5px;color:var(--primary);margin-bottom:14px;">hamahang.ir/r/sara-jomeh</div>
+            <div style="font-size:10px;color:var(--dim);margin-bottom:6px;">سطح اتاق</div>
+            <div class="coin-tile"><span>کوچک (تا ۵۰ نفر)</span><span class="price">۴۹,۰۰۰ ت</span></div>
+            <div class="coin-tile" style="border-color:var(--primary);"><span>عمومی (بدون سقف)</span><span class="price">۱۴۹,۰۰۰ ت</span></div>
+            <div class="coin-tile"><span>برند/رویداد</span><span class="price">مذاکره‌ای</span></div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;"><div class="cta-btn" style="width:70%;">ساخت اتاق و دریافت لینک</div></div>
+        </div>
+        <div class="phone-caption">بخش ۰۳ گزارش: اتاق پولی + لینک دعوت اختصاصی، پیش‌شرط برنامه‌ی افیلیت.</div>
+      </div>
+
+      <!-- Compatibility / instant match -->
+      <div class="phone-block">
+        <div class="phone-tag">۴ · همخوانی (Instant Match)</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="avatar"></div><div class="logo">اولین همخوانی</div><div class="ic"></div></div>
+          <div class="scr-body" style="text-align:center;">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--primary-soft);border:1px solid var(--primary);margin:6px auto;display:flex;align-items:center;justify-content:center;">🎉</div>
+            <div style="font-size:11px;font-weight:700;">اولین همخوانی‌ات را پیدا کن</div>
+            <div style="font-size:9px;color:var(--dim);margin:4px 0 12px;">افرادی که هم‌زمان به یک آهنگ گوش می‌دهند اینجا نمایش داده می‌شوند</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:right;">
+              <div class="hero-card" style="padding:8px;"><div class="hero-thumbs" style="grid-template-columns:1fr;"><div style="height:60px;"></div></div><div class="top" style="margin-top:6px;">نظر</div><div class="sub">دمیس روسوس</div></div>
+              <div class="hero-card" style="padding:8px;"><div class="hero-thumbs" style="grid-template-columns:1fr;"><div style="height:60px;"></div></div><div class="top" style="margin-top:6px;">کردم اما سو...</div><div class="sub">روزن</div></div>
+            </div>
+            <div class="cta-btn ghost" style="margin-top:10px;">تقویت پروفایل برای دیده‌شدن بیشتر</div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><div class="dot"></div>کاوش</div>
+            <div class="nav-item active"><div class="dot"></div>همخوانی</div>
+            <div class="nav-item"><div class="dot"></div>مچ‌ها</div>
+            <div class="nav-item"><div class="dot"></div>پسندها</div>
+            <div class="nav-item"><div class="dot"></div>ارتقا</div>
+            <div class="nav-item"><div class="dot"></div>پیام‌ها</div>
+          </div>
+        </div>
+        <div class="phone-caption">معادل بنفش صفحه‌ی «Instant Matches» رفرنس؛ اینجا سیگنال اصلی «شنیدن هم‌زمان» است، نه صرفاً سلیقه‌ی مشابه.</div>
+      </div>
+
+      <!-- Filters -->
+      <div class="phone-block">
+        <div class="phone-tag">۵ · فیلترهای مچ</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="ic">✕</div><div class="logo">فیلترهای مچ</div><div style="width:16px;"></div></div>
+          <div class="scr-body">
+            <div class="filter-block">
+              <div class="filter-label"><span>محدوده‌ی سنی</span></div>
+              <div style="font-size:10.5px;font-weight:700;">بین ۱۸ و ۶۵+</div>
+              <div class="slider-track"><div class="fill" style="left:0;right:0;"></div><div class="dot" style="right:0;"></div><div class="dot" style="left:0;"></div></div>
+            </div>
+            <div class="filter-block">
+              <div class="filter-label"><span>فاصله‌ی مکانی</span><span class="badge-vip">VIP</span></div>
+              <div style="font-size:10.5px;font-weight:700;">تا ۵۰۰+ کیلومتر</div>
+              <div class="slider-track"><div class="fill" style="right:0;left:20%;"></div><div class="dot" style="right:0;"></div></div>
+            </div>
+            <div style="font-size:10px;color:var(--dim);margin-bottom:6px;">نحوه‌ی مچ بر اساس موسیقی</div>
+            <div class="track-check"><span>هم‌زمان به یک آهنگ گوش دادن</span><div class="box">✓</div></div>
+            <div class="track-check"><span>خواننده‌ی مشترک</span><div class="box">✓</div></div>
+            <div class="track-check"><span>شنوندگان اخیر</span><div class="box">✓</div></div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;"><div class="cta-btn" style="width:70%;">اعمال فیلتر</div></div>
+        </div>
+        <div class="phone-caption">تقریباً عیناً همان صفحه‌ی فیلتر رفرنس — چون منطق مچینگ موسیقی‌محور هم‌آهنگ دقیقاً همین الگو را نیاز دارد؛ فقط چک‌باکس‌ها بنفش و برچسب «ELITE» به «VIP» تغییر کرده.</div>
+      </div>
+
+      <!-- Messages / asymmetric -->
+      <div class="phone-block">
+        <div class="phone-tag">۶ · پیام‌ها (مچینگ نامتقارن)</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="avatar"></div><div class="logo">پیام‌ها</div><div class="ic"></div></div>
+          <div class="scr-body">
+            <div class="pending-row">👨 ۳ درخواست پیام جدید در صف — بررسی کن</div>
+            <div class="msg-col">
+              <div class="msg-bubble in">سلام! آهنگ فرانسیز رو خیلی گوش میدم 🎶</div>
+              <div class="msg-bubble out">وای منم! چه هم‌آهنگی خوبی 😄</div>
+            </div>
+            <div style="margin-top:10px;font-size:9px;color:var(--dim);">پیشنهاد شروع‌کننده‌ی هوشمند (برای آقایان ویژه)</div>
+            <div class="hero-card" style="padding:8px;margin-top:6px;">
+              <div class="sub" style="margin-bottom:0;">«چون هردو به سنتی گوش می‌دید، شاید بپرسی نظرش راجع به فلان خواننده چیه»</div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><div class="dot"></div>کاوش</div>
+            <div class="nav-item"><div class="dot"></div>همخوانی</div>
+            <div class="nav-item"><div class="dot"></div>مچ‌ها</div>
+            <div class="nav-item"><div class="dot"></div>پسندها</div>
+            <div class="nav-item"><div class="dot"></div>ارتقا</div>
+            <div class="nav-item active"><div class="dot"></div>پیام‌ها</div>
+          </div>
+        </div>
+        <div class="phone-caption">بخش ۰۷: خانم‌ها آزادانه پیام می‌دهند؛ پیام آقایان عادی در صف انتظار می‌ماند تا خانم انتخاب کند. کاربر ویژه = پیام آماده‌ی هوشمند.</div>
+      </div>
+
+      <!-- Coin / Upgrade -->
+      <div class="phone-block">
+        <div class="phone-tag">۷ · ارتقا (سکه + اشتراک)</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="avatar"></div><div class="logo">ارتقا</div><div class="ic"></div></div>
+          <div class="pill-row"><div class="pill on">اشتراک VIP</div><div class="pill">فروشگاه سکه</div></div>
+          <div class="scr-body">
+            <div class="hero-card"><div class="top">اشتراک ماهانه VIP</div><div class="sub">جست‌وجوی نامحدود + پیام آماده‌ی هوشمند + مشاهده‌ی پروفایل‌های ویژه</div><div class="cta-btn">فعال‌سازی VIP</div></div>
+            <div style="font-size:10px;color:var(--dim);margin:10px 0 6px;">بسته‌های سکه</div>
+            <div class="coin-tile"><span>🪙 ۱۰۰ سکه</span><span class="price">۲۹,۰۰۰ ت</span></div>
+            <div class="coin-tile"><span>🪙 ۵۰۰ سکه</span><span class="price">۱۱۹,۰۰۰ ت</span></div>
+            <div class="coin-tile"><span>🪙 ۱۲۰۰ سکه</span><span class="price">۲۴۹,۰۰۰ ت</span></div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><div class="dot"></div>کاوش</div>
+            <div class="nav-item"><div class="dot"></div>همخوانی</div>
+            <div class="nav-item"><div class="dot"></div>مچ‌ها</div>
+            <div class="nav-item"><div class="dot"></div>پسندها</div>
+            <div class="nav-item active"><div class="dot"></div>ارتقا</div>
+            <div class="nav-item"><div class="dot"></div>پیام‌ها</div>
+          </div>
+        </div>
+        <div class="phone-caption">دو منبع درآمد اصلی بخش ۱۰ (اشتراک + سکه) در یک صفحه با دو تب داخلی.</div>
+      </div>
+
+      <!-- AI companion -->
+      <div class="phone-block">
+        <div class="phone-tag">۸ · دستیار هوش مصنوعی</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="ic">‹</div><div class="logo">آوا · اتاق تمرین</div><div style="width:16px;"></div></div>
+          <div class="scr-body">
+            <div class="ai-bubble-row">
+              <div class="ai-avatar-sm" style="background:linear-gradient(135deg,var(--coral),var(--gold));">👩</div>
+              <div class="msg-bubble in" style="margin:0;">سلام! می‌خوای تمرین کنیم چطور با یه پیام ساده شروع کنی؟</div>
+            </div>
+            <div class="msg-col" style="align-items:flex-end;">
+              <div class="msg-bubble out">آره ولی می‌ترسم جواب نده</div>
+            </div>
+            <div class="note-box" style="padding:8px 10px;font-size:8.6px;margin-top:10px;">این فقط اتاق تمرینه — حالا همینو با یه آدم واقعی توی اتاق امتحان کن 🎧</div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;"><div class="cta-btn ghost" style="width:70%;">برو به اتاق واقعی</div></div>
+        </div>
+        <div class="phone-caption">بخش ۰۹: تأکید صریح روی «اتاق تمرین بودن» + هدایت فعال به‌سوی گفتگوی واقعی، طبق نکته‌ی طراحی گزارش.</div>
+      </div>
+
+      <!-- Affiliate dashboard -->
+      <div class="phone-block">
+        <div class="phone-tag">۹ · داشبورد افیلیت</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="avatar"></div><div class="logo">لینک من</div><div class="ic"></div></div>
+          <div class="scr-body">
+            <div class="mono" style="background:var(--bg-soft);border:1px solid var(--primary);border-radius:9px;padding:8px 10px;font-size:9px;color:var(--primary);margin-bottom:10px;">hamahang.ir/aff/sara92</div>
+            <div class="aff-mini-row"><span>کانال موزیک پاپ</span><span style="color:var(--primary);">۲۰٪</span></div>
+            <div class="aff-mini-row"><span>پیج معرفی اپ</span><span style="color:var(--primary);">۱۵٪</span></div>
+            <div class="aff-mini-row"><span>گروه دورهمی تهران</span><span style="color:var(--primary);">۲۵٪</span></div>
+            <div class="hero-card" style="margin-top:12px;"><div class="top">درآمد این ماه</div><div class="sub" style="font-size:13px;color:var(--primary);font-weight:800;">۴,۲۰۰,۰۰۰ تومان</div></div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;"><div class="cta-btn ghost" style="width:70%;">برداشت / تبدیل به اعتبار اتاق</div></div>
+        </div>
+        <div class="phone-caption">بخش ۰۵: در دسترس ادمین‌های کانال/پیج از داخل پروفایل یا از طریق دعوت‌نامه‌ی سطح شریک تبلیغاتی.</div>
+      </div>
+
+      <!-- Mini games -->
+      <div class="phone-block">
+        <div class="phone-tag">۱۰ · لایه‌ی بازی (اورلی)</div>
+        <div class="phone-frame">
+          <div class="app-header"><div class="ic">✕</div><div class="logo">بازی‌های سریع</div><div style="width:16px;"></div></div>
+          <div class="scr-body">
+            <div class="game-tile">🎵 حدس آهنگ — ۳ ثانیه پخش می‌شود</div>
+            <div class="game-tile">💭 کوییز حس‌وحال دونفره</div>
+            <div class="game-tile">🎤 این خط از کیه؟</div>
+            <div class="game-tile">🃏 کارت‌های سؤال‌وجواب</div>
+          </div>
+          <div class="bottom-nav" style="justify-content:center;"><div class="cta-btn" style="width:70%;">شروع بازی</div></div>
+        </div>
+        <div class="phone-caption">بخش ۰۸: به‌صورت اورلی/بات‌شیت از داخل اتاق زنده یا داخل چت مچ‌شده باز می‌شود، نه یک تب مستقل.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- COMPONENTS -->
+<section class="section-pad" id="components">
+  <div class="wrap">
+    <div class="eyebrow">۰۵ &nbsp;کتابخانه‌ی کامپوننت</div>
+    <h2 class="section-title">اجزایی که تیم طراحی باید یک‌بار بسازد و همه‌جا استفاده شود</h2>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="num">۰۱</div><h4>چیپ فیلتر (Pill)</h4><p>حالت خاموش/روشن، همیشه با حاشیه‌ی بنفش در حالت انتخاب‌شده</p></div>
+      <div class="feat-card"><div class="num">۰۲</div><h4>کارت اتاق</h4><p>تامبنیل + عنوان + تعداد آنلاین/برچسب VIP، در Explore و مچ‌ها تکرار می‌شود</p></div>
+      <div class="feat-card"><div class="num">۰۳</div><h4>کارت اسپانسری/ویژه</div><p>گرادیان بنفش، برای اتاق تبلیغاتی و پلی‌لیست ویژه</p></div>
+      <div class="feat-card"><div class="num">۰۴</div><h4>دکمه‌ی اصلی (CTA)</h4><p>پرشده‌ی بنفش برای اکشن اصلی؛ حاشیه‌دار بنفش برای اکشن ثانویه</p></div>
+      <div class="feat-card"><div class="num">۰۵</div><h4>اسلایدر دورنج</h4><p>برای سن/فاصله/قد در فیلترها — دسته‌ی بنفش، ریل خاکستری</p></div>
+      <div class="feat-card"><div class="num">۰۶</div><h4>چک‌باکس مربعی</h4><p>برای معیارهای مچ موسیقی (آهنگ/خواننده/شنونده‌ی اخیر)</p></div>
+      <div class="feat-card"><div class="num">۰۷</div><h4>حباب گفتگو</h4><p>پیام من = پرشده‌ی بنفش؛ پیام طرف مقابل = خاکستری تیره‌ی خنثی</p></div>
+      <div class="feat-card"><div class="num">۰۸</div><h4>ردیف صف انتظار</h4><p>خط‌چین بنفش، مخصوص پیام‌های در انتظار تأیید خانم</p></div>
+      <div class="feat-card"><div class="num">۰۹</div><h4>حباب هدیه (Toast)</h4><p>گرادیان بنفش↔کورال، برای اعلان لحظه‌ای هدیه در اتاق</p></div>
+      <div class="feat-card"><div class="num">۱۰</div><h4>ردیف قیمت/سکه</h4><p>عنوان + قیمت با فونت Space Mono، یکسان در فروشگاه سکه و ساخت اتاق</p></div>
+      <div class="feat-card"><div class="num">۱۱</div><h4>نشان VIP</h4><p>برچسب کوچک بنفش پرشده، جایگزین برچسب ELITE بنفش رفرنس</p></div>
+      <div class="feat-card"><div class="num">۱۲</div><h4>نوار پایین (۶ تب)</h4><p>آیکن + برچسب، تب فعال بنفش، بقیه خاکستری کم‌رنگ</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- HANDOFF -->
+<section class="section-pad" id="handoff">
+  <div class="wrap">
+    <div class="eyebrow">۰۶ &nbsp;نکات تحویل به طراح</div>
+    <h2 class="section-title">قبل از شروع فیگما، این‌ها را با تیم طراحی هماهنگ کن</h2>
+    <div class="checklist">
+      <label><input type="checkbox" checked disabled> جهت رابط RTL کامل (فارسی) با پشتیبانی از اعداد لاتین برای لینک/قیمت</label>
+      <label><input type="checkbox" checked disabled> فونت Vazirmatn برای متن، Space Mono برای لینک دعوت و اعداد سکه/قیمت</label>
+      <label><input type="checkbox"> ست کامل آیکن (۶ تب پایین + آیکن‌های سرگرمی/هدیه) به‌جای دایره‌های جای‌گیرنده در وایرفریم</label>
+      <label><input type="checkbox"> حالت‌های خالی (Empty state) برای «هنوز مچی نداری» و «صف پیام خالی است»</label>
+      <label><input type="checkbox"> نسخه‌ی روشن/تیره یا فقط تیره؟ — تصمیم قطعی برند لازم است</label>
+      <label><input type="checkbox"> انیمیشن حباب هدیه‌ی نمایشی روی کل اتاق (Motion spec جدا)</label>
+      <label><input type="checkbox"> برچسب VIP/رایگان روی هر عنصر قفل‌شده (فیلتر فاصله، پیام آماده‌ی هوشمند، ساخت اتاق نامحدود)</label>
+      <label><input type="checkbox"> نسخه‌ی موبایل‌وب برای لندینگ لینک دعوت (hamahang.ir/r/…) — اولین برخورد کاربر مهمان</label>
+    </div>
+    <div class="note-box">
+      <b>یادآوری مهم:</b> ساختار صفحات فیلتر و همخوانی عمداً به رفرنس نزدیک نگه داشته شده چون منطق مچینگ موسیقی‌محور هم‌آهنگ دقیقاً همان نیاز کاربر را دارد. اما اتاق زنده، اقتصاد هدیه، ساخت اتاق پولی، افیلیت و دستیار AI مفاهیمی هستند که در رفرنس اصلاً وجود ندارند — این‌ها هویت واقعی هم‌آهنگ‌اند و باید در اجرای نهایی از نظر بصری برجسته‌تر از بقیه باشند، نه صرفاً یک تب فرعی.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>این سند بر اساس گزارش «هم‌آهنگ — مدل کامل کسب‌وکار و تجربه‌ی کاربری، نسخه‌ی سوم» و اسکرین‌شات‌های رفرنس makromusic تهیه شده. وایرفریم‌ها ساختاری‌اند؛ رنگ پایه (بنفش #8B5CF6) و اجزای کامپوننت مبنای طراحی نهایی در فیگما خواهند بود.</p>
+  </div>
+</footer>
+
+</body>
+</html>
