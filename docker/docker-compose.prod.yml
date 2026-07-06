@@ -37,7 +37,7 @@ services:
   # ============ Backend API ============
   backend:
     build:
-      context: ../backend
+      context: ./backend
       dockerfile: Dockerfile
     container_name: hamahang-api
     restart: unless-stopped
@@ -82,7 +82,7 @@ services:
   # ============ Admin Panel ============
   admin:
     build:
-      context: ../admin
+      context: ./admin
       dockerfile: Dockerfile
     container_name: hamahang-admin
     restart: unless-stopped
